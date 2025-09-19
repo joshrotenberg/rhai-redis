@@ -1,7 +1,7 @@
 //! Basic example of using rhai-redis
 
-use rhai_redis::{RedisEngine, RedisClient};
 use redis::Client;
+use rhai_redis::{RedisClient, RedisEngine};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Connect to Redis
@@ -13,7 +13,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     engine.set_redis_client(RedisClient::new(conn));
 
     // Run a simple script
-    engine.run(r#"
+    engine.run(
+        r#"
         // Set some values
         redis.set("name", "Alice");
         redis.set("age", "30");
@@ -47,7 +48,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         redis.set("counter", "0");
         let count = redis.incr("counter");
         print("Counter: " + count.to_string());
-    "#)?;
+    "#,
+    )?;
 
     Ok(())
 }

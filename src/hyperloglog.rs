@@ -43,19 +43,24 @@ impl RedisClient {
 /// Register HyperLogLog methods with Rhai engine
 pub fn register_hyperloglog_methods(engine: &mut Engine) {
     engine
-        .register_fn("pfadd", |client: &mut RedisClient, key: &str, elements: Vec<Dynamic>| {
-            client.pfadd(key, elements)
-        })
+        .register_fn(
+            "pfadd",
+            |client: &mut RedisClient, key: &str, elements: Vec<Dynamic>| {
+                client.pfadd(key, elements)
+            },
+        )
         .register_fn("pfcount", |client: &mut RedisClient, keys: Vec<Dynamic>| {
             client.pfcount(keys)
         })
-        .register_fn("pfmerge", |client: &mut RedisClient, destkey: &str, sourcekeys: Vec<Dynamic>| {
-            client.pfmerge(destkey, sourcekeys)
-        })
-        .register_fn("pfdebug", |client: &mut RedisClient, subcommand: &str, key: &str| {
-            client.pfdebug(subcommand, key)
-        })
-        .register_fn("pfselftest", |client: &mut RedisClient| {
-            client.pfselftest()
-        });
+        .register_fn(
+            "pfmerge",
+            |client: &mut RedisClient, destkey: &str, sourcekeys: Vec<Dynamic>| {
+                client.pfmerge(destkey, sourcekeys)
+            },
+        )
+        .register_fn(
+            "pfdebug",
+            |client: &mut RedisClient, subcommand: &str, key: &str| client.pfdebug(subcommand, key),
+        )
+        .register_fn("pfselftest", |client: &mut RedisClient| client.pfselftest());
 }

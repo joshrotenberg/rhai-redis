@@ -6,10 +6,10 @@ use thiserror::Error;
 pub enum Error {
     #[error("Redis error: {0}")]
     Redis(#[from] redis::RedisError),
-    
+
     #[error("Rhai script error: {0}")]
     Script(String),
-    
+
     #[error("Connection error: {0}")]
     Connection(String),
 }

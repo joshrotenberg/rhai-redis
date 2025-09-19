@@ -56,16 +56,16 @@ impl RedisClient {
         )
     }
 
-pub fn register_search_methods(engine: &mut Engine) {
-    engine
-        .register_fn("ft_create", RedisClient::ft_create)
-        .register_fn("ft_search", RedisClient::ft_search)
-        .register_fn("ft_aggregate", RedisClient::ft_aggregate)
-        .register_fn("ft_info", RedisClient::ft_info)
-        .register_fn("ft_dropindex", RedisClient::ft_dropindex)
-        .register_fn("ft_explain", RedisClient::ft_explain)
-        .register_fn("ft_tagvals", RedisClient::ft_tagvals);
-}
+    pub fn register_search_methods(engine: &mut Engine) {
+        engine
+            .register_fn("ft_create", RedisClient::ft_create)
+            .register_fn("ft_search", RedisClient::ft_search)
+            .register_fn("ft_aggregate", RedisClient::ft_aggregate)
+            .register_fn("ft_info", RedisClient::ft_info)
+            .register_fn("ft_dropindex", RedisClient::ft_dropindex)
+            .register_fn("ft_explain", RedisClient::ft_explain)
+            .register_fn("ft_tagvals", RedisClient::ft_tagvals);
+    }
 
     // Additional search commands
 
@@ -107,14 +107,16 @@ pub fn register_search_methods(engine: &mut Engine) {
     pub fn ft_config_get(&mut self, option: &str) -> Dynamic {
         self.cmd(
             "FT.CONFIG",
-            vec![
-                Dynamic::from("GET"),
-                Dynamic::from(option.to_string()),
-            ],
+            vec![Dynamic::from("GET"), Dynamic::from(option.to_string())],
         )
     }
 
-    pub fn ft_synupdate(&mut self, index: &str, synonym_group_id: &str, terms: Vec<Dynamic>) -> Dynamic {
+    pub fn ft_synupdate(
+        &mut self,
+        index: &str,
+        synonym_group_id: &str,
+        terms: Vec<Dynamic>,
+    ) -> Dynamic {
         let mut args = vec![
             Dynamic::from(index.to_string()),
             Dynamic::from(synonym_group_id.to_string()),
@@ -152,7 +154,13 @@ pub fn register_search_methods(engine: &mut Engine) {
         self.cmd("FT.DICTDUMP", vec![Dynamic::from(dict.to_string())])
     }
 
-    pub fn ft_sugadd(&mut self, key: &str, string: &str, score: f64, options: Vec<Dynamic>) -> Dynamic {
+    pub fn ft_sugadd(
+        &mut self,
+        key: &str,
+        string: &str,
+        score: f64,
+        options: Vec<Dynamic>,
+    ) -> Dynamic {
         let mut args = vec![
             Dynamic::from(key.to_string()),
             Dynamic::from(string.to_string()),
@@ -185,7 +193,6 @@ pub fn register_search_methods(engine: &mut Engine) {
         self.cmd("FT.SUGLEN", vec![Dynamic::from(key.to_string())])
     }
 }
-
 
 pub fn register_search_methods(engine: &mut Engine) {
     engine

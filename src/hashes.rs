@@ -65,7 +65,7 @@ impl RedisClient {
     pub fn hgetall(&mut self, key: &str) -> rhai::Map {
         let mut conn = self.conn.lock().unwrap();
         let result: Vec<(String, String)> = conn.hgetall(key).unwrap_or_default();
-        
+
         let mut map = rhai::Map::new();
         for (k, v) in result {
             map.insert(k.into(), Dynamic::from(v));

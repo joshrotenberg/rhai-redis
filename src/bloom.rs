@@ -70,25 +70,37 @@ impl RedisClient {
 /// Register Bloom filter methods with Rhai engine
 pub fn register_bloom_methods(engine: &mut Engine) {
     engine
-        .register_fn("bf_reserve", |client: &mut RedisClient, key: &str, error_rate: f64, capacity: i64| {
-            client.bf_reserve(key, error_rate, capacity)
-        })
-        .register_fn("bf_add", |client: &mut RedisClient, key: &str, item: &str| {
-            client.bf_add(key, item)
-        })
-        .register_fn("bf_exists", |client: &mut RedisClient, key: &str, item: &str| {
-            client.bf_exists(key, item)
-        })
-        .register_fn("bf_madd", |client: &mut RedisClient, key: &str, items: Vec<Dynamic>| {
-            client.bf_madd(key, items)
-        })
-        .register_fn("bf_mexists", |client: &mut RedisClient, key: &str, items: Vec<Dynamic>| {
-            client.bf_mexists(key, items)
-        })
+        .register_fn(
+            "bf_reserve",
+            |client: &mut RedisClient, key: &str, error_rate: f64, capacity: i64| {
+                client.bf_reserve(key, error_rate, capacity)
+            },
+        )
+        .register_fn(
+            "bf_add",
+            |client: &mut RedisClient, key: &str, item: &str| client.bf_add(key, item),
+        )
+        .register_fn(
+            "bf_exists",
+            |client: &mut RedisClient, key: &str, item: &str| client.bf_exists(key, item),
+        )
+        .register_fn(
+            "bf_madd",
+            |client: &mut RedisClient, key: &str, items: Vec<Dynamic>| client.bf_madd(key, items),
+        )
+        .register_fn(
+            "bf_mexists",
+            |client: &mut RedisClient, key: &str, items: Vec<Dynamic>| {
+                client.bf_mexists(key, items)
+            },
+        )
         .register_fn("bf_info", |client: &mut RedisClient, key: &str| {
             client.bf_info(key)
         })
-        .register_fn("bf_insert", |client: &mut RedisClient, key: &str, options: Vec<Dynamic>, items: Vec<Dynamic>| {
-            client.bf_insert(key, options, items)
-        });
+        .register_fn(
+            "bf_insert",
+            |client: &mut RedisClient, key: &str, options: Vec<Dynamic>, items: Vec<Dynamic>| {
+                client.bf_insert(key, options, items)
+            },
+        );
 }

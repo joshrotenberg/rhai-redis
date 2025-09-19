@@ -1,13 +1,13 @@
 #[cfg(test)]
 mod bitmap_tests {
-    use rhai_redis::{RedisEngine, RedisClient};
     use redis::Client;
+    use rhai_redis::{RedisClient, RedisEngine};
 
     fn setup() -> RedisEngine {
         let client = Client::open("redis://localhost:6379").expect("Failed to connect");
         let conn = client.get_connection().expect("Failed to get connection");
         let redis_client = RedisClient::new(conn);
-        
+
         let mut engine = RedisEngine::new();
         engine.set_redis_client(redis_client);
         engine
@@ -17,7 +17,7 @@ mod bitmap_tests {
     #[ignore]
     fn test_bitmap_basic() {
         let mut engine = setup();
-        
+
         let script = r#"
             redis.cmd("FLUSHDB", []);
             
@@ -39,7 +39,7 @@ mod bitmap_tests {
             let count = redis.bitcount("bitmap:test");
             print("Total set bits: " + count.to_string());
         "#;
-        
+
         engine.run(script).expect("Script failed");
     }
 
@@ -47,7 +47,7 @@ mod bitmap_tests {
     #[ignore]
     fn test_bitmap_operations() {
         let mut engine = setup();
-        
+
         let script = r#"
             redis.cmd("FLUSHDB", []);
             
@@ -79,7 +79,7 @@ mod bitmap_tests {
             let xor_count = redis.bitcount("bitmap:xor");
             print("XOR set bits: " + xor_count.to_string());
         "#;
-        
+
         engine.run(script).expect("Script failed");
     }
 
@@ -87,7 +87,7 @@ mod bitmap_tests {
     #[ignore]
     fn test_bitmap_position() {
         let mut engine = setup();
-        
+
         let script = r#"
             redis.cmd("FLUSHDB", []);
             
@@ -108,7 +108,7 @@ mod bitmap_tests {
             let in_range = redis.bitpos_range("bitmap:pos", 1, 3, 15);
             print("First set bit in range [3,15]: " + in_range.to_string());
         "#;
-        
+
         engine.run(script).expect("Script failed");
     }
 
@@ -116,7 +116,7 @@ mod bitmap_tests {
     #[ignore]
     fn test_bitmap_counting() {
         let mut engine = setup();
-        
+
         let script = r#"
             redis.cmd("FLUSHDB", []);
             
@@ -147,7 +147,7 @@ mod bitmap_tests {
             let any_day = redis.bitcount("users:any_day");
             print("Active any day: " + any_day.to_string());
         "#;
-        
+
         engine.run(script).expect("Script failed");
     }
 }

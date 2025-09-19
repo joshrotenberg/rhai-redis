@@ -1,13 +1,13 @@
 #[cfg(test)]
 mod hyperloglog_tests {
-    use rhai_redis::{RedisEngine, RedisClient};
     use redis::Client;
+    use rhai_redis::{RedisClient, RedisEngine};
 
     fn setup() -> RedisEngine {
         let client = Client::open("redis://localhost:6379").expect("Failed to connect");
         let conn = client.get_connection().expect("Failed to get connection");
         let redis_client = RedisClient::new(conn);
-        
+
         let mut engine = RedisEngine::new();
         engine.set_redis_client(redis_client);
         engine
@@ -17,7 +17,7 @@ mod hyperloglog_tests {
     #[ignore] // Run with: cargo test -- --ignored
     fn test_hyperloglog_basic() {
         let mut engine = setup();
-        
+
         let script = r#"
             redis.cmd("FLUSHDB", []);
             
@@ -34,7 +34,7 @@ mod hyperloglog_tests {
             let count = redis.pfcount(["hll:test"]);
             print("Unique count: " + count.to_string());
         "#;
-        
+
         engine.run(script).expect("Script failed");
     }
 
@@ -42,7 +42,7 @@ mod hyperloglog_tests {
     #[ignore]
     fn test_hyperloglog_merge() {
         let mut engine = setup();
-        
+
         let script = r#"
             redis.cmd("FLUSHDB", []);
             
@@ -63,7 +63,7 @@ mod hyperloglog_tests {
             let merged_count = redis.pfcount(["hll:merged"]);
             print("Merged count: " + merged_count.to_string());
         "#;
-        
+
         engine.run(script).expect("Script failed");
     }
 
@@ -71,7 +71,7 @@ mod hyperloglog_tests {
     #[ignore]
     fn test_hyperloglog_large_dataset() {
         let mut engine = setup();
-        
+
         let script = r#"
             redis.cmd("FLUSHDB", []);
             
@@ -88,7 +88,7 @@ mod hyperloglog_tests {
             let memory = redis.cmd("MEMORY", ["USAGE", "hll:large"]);
             print("Memory usage: " + memory.to_string() + " bytes");
         "#;
-        
+
         engine.run(script).expect("Script failed");
     }
 }

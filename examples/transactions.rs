@@ -1,7 +1,7 @@
 //! Transaction example for rhai-redis
 
-use rhai_redis::{RedisEngine, RedisClient};
 use redis::Client;
+use rhai_redis::{RedisClient, RedisEngine};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::open("redis://localhost:6379")?;
@@ -10,7 +10,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut engine = RedisEngine::new();
     engine.set_redis_client(RedisClient::new(conn));
 
-    engine.run(r#"
+    engine.run(
+        r#"
         print("=== Transaction Example ===");
 
         // Set initial values
@@ -47,7 +48,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         if temp == () {
             print("Transaction was discarded, temp key not set");
         }
-    "#)?;
+    "#,
+    )?;
 
     Ok(())
 }

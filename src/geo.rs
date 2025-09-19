@@ -39,7 +39,15 @@ impl RedisClient {
     }
 
     /// Search within radius
-    pub fn georadius(&mut self, key: &str, longitude: f64, latitude: f64, radius: f64, unit: &str, options: Vec<Dynamic>) -> Dynamic {
+    pub fn georadius(
+        &mut self,
+        key: &str,
+        longitude: f64,
+        latitude: f64,
+        radius: f64,
+        unit: &str,
+        options: Vec<Dynamic>,
+    ) -> Dynamic {
         let mut args = vec![
             Dynamic::from(key.to_string()),
             Dynamic::from(longitude),
@@ -52,7 +60,14 @@ impl RedisClient {
     }
 
     /// Search within radius by member
-    pub fn georadiusbymember(&mut self, key: &str, member: &str, radius: f64, unit: &str, options: Vec<Dynamic>) -> Dynamic {
+    pub fn georadiusbymember(
+        &mut self,
+        key: &str,
+        member: &str,
+        radius: f64,
+        unit: &str,
+        options: Vec<Dynamic>,
+    ) -> Dynamic {
         let mut args = vec![
             Dynamic::from(key.to_string()),
             Dynamic::from(member.to_string()),
@@ -71,7 +86,12 @@ impl RedisClient {
     }
 
     /// Store search results (Redis 6.2+)
-    pub fn geosearchstore(&mut self, destination: &str, source: &str, options: Vec<Dynamic>) -> Dynamic {
+    pub fn geosearchstore(
+        &mut self,
+        destination: &str,
+        source: &str,
+        options: Vec<Dynamic>,
+    ) -> Dynamic {
         let mut args = vec![
             Dynamic::from(destination.to_string()),
             Dynamic::from(source.to_string()),
@@ -84,28 +104,61 @@ impl RedisClient {
 /// Register Geo methods with Rhai engine
 pub fn register_geo_methods(engine: &mut Engine) {
     engine
-        .register_fn("geoadd", |client: &mut RedisClient, key: &str, items: Vec<Dynamic>| {
-            client.geoadd(key, items)
-        })
-        .register_fn("geodist", |client: &mut RedisClient, key: &str, member1: &str, member2: &str, unit: &str| {
-            client.geodist(key, member1, member2, unit)
-        })
-        .register_fn("geohash", |client: &mut RedisClient, key: &str, members: Vec<Dynamic>| {
-            client.geohash(key, members)
-        })
-        .register_fn("geopos", |client: &mut RedisClient, key: &str, members: Vec<Dynamic>| {
-            client.geopos(key, members)
-        })
-        .register_fn("georadius", |client: &mut RedisClient, key: &str, longitude: f64, latitude: f64, radius: f64, unit: &str, options: Vec<Dynamic>| {
-            client.georadius(key, longitude, latitude, radius, unit, options)
-        })
-        .register_fn("georadiusbymember", |client: &mut RedisClient, key: &str, member: &str, radius: f64, unit: &str, options: Vec<Dynamic>| {
-            client.georadiusbymember(key, member, radius, unit, options)
-        })
-        .register_fn("geosearch", |client: &mut RedisClient, key: &str, options: Vec<Dynamic>| {
-            client.geosearch(key, options)
-        })
-        .register_fn("geosearchstore", |client: &mut RedisClient, destination: &str, source: &str, options: Vec<Dynamic>| {
-            client.geosearchstore(destination, source, options)
-        });
+        .register_fn(
+            "geoadd",
+            |client: &mut RedisClient, key: &str, items: Vec<Dynamic>| client.geoadd(key, items),
+        )
+        .register_fn(
+            "geodist",
+            |client: &mut RedisClient, key: &str, member1: &str, member2: &str, unit: &str| {
+                client.geodist(key, member1, member2, unit)
+            },
+        )
+        .register_fn(
+            "geohash",
+            |client: &mut RedisClient, key: &str, members: Vec<Dynamic>| {
+                client.geohash(key, members)
+            },
+        )
+        .register_fn(
+            "geopos",
+            |client: &mut RedisClient, key: &str, members: Vec<Dynamic>| {
+                client.geopos(key, members)
+            },
+        )
+        .register_fn(
+            "georadius",
+            |client: &mut RedisClient,
+             key: &str,
+             longitude: f64,
+             latitude: f64,
+             radius: f64,
+             unit: &str,
+             options: Vec<Dynamic>| {
+                client.georadius(key, longitude, latitude, radius, unit, options)
+            },
+        )
+        .register_fn(
+            "georadiusbymember",
+            |client: &mut RedisClient,
+             key: &str,
+             member: &str,
+             radius: f64,
+             unit: &str,
+             options: Vec<Dynamic>| {
+                client.georadiusbymember(key, member, radius, unit, options)
+            },
+        )
+        .register_fn(
+            "geosearch",
+            |client: &mut RedisClient, key: &str, options: Vec<Dynamic>| {
+                client.geosearch(key, options)
+            },
+        )
+        .register_fn(
+            "geosearchstore",
+            |client: &mut RedisClient, destination: &str, source: &str, options: Vec<Dynamic>| {
+                client.geosearchstore(destination, source, options)
+            },
+        );
 }

@@ -1,14 +1,12 @@
 #[cfg(test)]
 mod integration_tests {
-    use rhai_redis::{RedisEngine, RedisClient};
     use redis::Client;
+    use rhai_redis::{RedisClient, RedisEngine};
     use serial_test::serial;
 
     fn get_redis_connection() -> redis::Connection {
-        let client = Client::open("redis://localhost:6379")
-            .expect("Failed to create client");
-        client.get_connection()
-            .expect("Failed to connect to Redis")
+        let client = Client::open("redis://localhost:6379").expect("Failed to create client");
+        client.get_connection().expect("Failed to connect to Redis")
     }
 
     #[test]
@@ -18,14 +16,18 @@ mod integration_tests {
         let mut engine = RedisEngine::new();
         engine.set_redis_client(RedisClient::new(conn));
 
-        engine.run(r#"
+        engine
+            .run(
+                r#"
             redis.set("test:key", "test_value");
             let value = redis.get("test:key");
             if value != "test_value" {
                 throw "Value mismatch: " + value;
             }
             redis.del("test:key");
-        "#).expect("Script failed");
+        "#,
+            )
+            .expect("Script failed");
     }
 
     #[test]
@@ -35,7 +37,9 @@ mod integration_tests {
         let mut engine = RedisEngine::new();
         engine.set_redis_client(RedisClient::new(conn));
 
-        engine.run(r#"
+        engine
+            .run(
+                r#"
             redis.del("test:list");
             redis.lpush("test:list", "item1");
             redis.lpush("test:list", "item2");
@@ -46,7 +50,9 @@ mod integration_tests {
             }
             
             redis.del("test:list");
-        "#).expect("Script failed");
+        "#,
+            )
+            .expect("Script failed");
     }
 
     #[test]
@@ -56,7 +62,9 @@ mod integration_tests {
         let mut engine = RedisEngine::new();
         engine.set_redis_client(RedisClient::new(conn));
 
-        engine.run(r#"
+        engine
+            .run(
+                r#"
             redis.del("test:hash");
             redis.hset("test:hash", "field1", "value1");
             redis.hset("test:hash", "field2", "value2");
@@ -72,6 +80,8 @@ mod integration_tests {
             }
             
             redis.del("test:hash");
-        "#).expect("Script failed");
+        "#,
+            )
+            .expect("Script failed");
     }
 }

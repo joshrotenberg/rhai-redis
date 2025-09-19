@@ -9,6 +9,11 @@ pub struct RedisEngine {
     client: Option<RedisClient>,
 }
 
+impl Default for RedisEngine {
+    fn default() -> Self {
+        Self::new()
+    }
+}
 impl RedisEngine {
     /// Create a new Redis-enabled Rhai engine
     pub fn new() -> Self {
@@ -26,7 +31,9 @@ impl RedisEngine {
 
     /// Run a script with the configured Redis client
     pub fn run(&mut self, script: &str) -> Result<()> {
-        let client = self.client.as_ref()
+        let client = self
+            .client
+            .as_ref()
             .ok_or_else(|| crate::Error::Connection("No Redis client configured".into()))?;
 
         let mut scope = Scope::new();
@@ -41,7 +48,9 @@ impl RedisEngine {
 
     /// Run a script with variables
     pub fn run_with_variables(&mut self, script: &str, vars: Vec<(String, String)>) -> Result<()> {
-        let client = self.client.as_ref()
+        let client = self
+            .client
+            .as_ref()
             .ok_or_else(|| crate::Error::Connection("No Redis client configured".into()))?;
 
         let mut scope = Scope::new();
@@ -93,7 +102,7 @@ pub fn create_redis_engine() -> Result<Engine> {
     crate::pubsub::register_pubsub_methods(&mut engine);
     crate::transactions::register_transaction_methods(&mut engine);
     crate::generic::register_generic_methods(&mut engine);
-    
+
     // Register new modules
     crate::bitmap::register_bitmap_methods(&mut engine);
     crate::bloom::register_bloom_methods(&mut engine);

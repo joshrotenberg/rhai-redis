@@ -25,8 +25,8 @@
 pub mod bitmap;
 pub mod bloom;
 pub mod client;
-pub mod geo;
 pub mod generic;
+pub mod geo;
 pub mod hashes;
 pub mod hyperloglog;
 pub mod json;
@@ -41,11 +41,11 @@ pub mod strings;
 pub mod transactions;
 pub mod utils;
 
-mod error;
 mod engine;
+mod error;
 
 pub use client::RedisClient;
-pub use engine::{RedisEngine, create_redis_engine};
+pub use engine::{create_redis_engine, RedisEngine};
 pub use error::{Error, Result};
 
 // Re-export rhai types that users might need

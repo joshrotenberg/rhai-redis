@@ -8,11 +8,11 @@ Redis scripting support for [Rhai](https://rhai.rs) - an embedded scripting lang
 
 ## Features
 
-- 🚀 **Full Redis Command Coverage**: Strings, Lists, Hashes, Sets, Sorted Sets, Streams, Transactions, and more
-- 🛡️ **Safe & Sandboxed**: Scripts run in a controlled environment with configurable limits
-- 🎯 **Object-Oriented API**: Natural `redis.set()`, `redis.get()` syntax
-- ⚡ **Sync & Async Support**: Use blocking or async Redis connections (with feature flags)
-- 🔧 **Extensible**: Easy to add custom commands or modify behavior
+- **Full Redis Command Coverage**: Strings, Lists, Hashes, Sets, Sorted Sets, Streams, Transactions, and more
+- **Safe & Sandboxed**: Scripts run in a controlled environment with configurable limits
+- **Object-Oriented API**: Natural `redis.set()`, `redis.get()` syntax
+- **Sync & Async Support**: Use blocking or async Redis connections (with feature flags)
+- **Extensible**: Easy to add custom commands or modify behavior
 
 ## Installation
 

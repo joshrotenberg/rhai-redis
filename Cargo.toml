@@ -1,0 +1,28 @@
+[package]
+name = "rhai-redis"
+version = "0.1.0"
+edition = "2021"
+authors = ["Josh Rotenberg <joshrotenberg@gmail.com>"]
+description = "Redis scripting support for Rhai"
+repository = "https://github.com/joshrotenberg/rhai-redis"
+readme = "README.md"
+license = "MIT OR Apache-2.0"
+keywords = ["redis", "rhai", "scripting", "embedded", "database"]
+categories = ["database", "development-tools"]
+
+[dependencies]
+rhai = "1.20"
+redis = "0.32"
+thiserror = "2.0"
+rand = { version = "0.8", optional = true }
+tokio = { version = "1", features = ["rt", "macros"], optional = true }
+async-trait = { version = "0.1", optional = true }
+
+[features]
+default = ["utils"]
+async = ["redis/tokio-comp", "tokio", "async-trait"]
+utils = ["rand"]
+
+[dev-dependencies]
+tokio = { version = "1", features = ["full"] }
+serial_test = "3.2"

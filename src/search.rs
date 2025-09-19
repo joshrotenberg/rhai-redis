@@ -55,7 +55,6 @@ impl RedisClient {
             ],
         )
     }
-}
 
 pub fn register_search_methods(engine: &mut Engine) {
     engine
@@ -185,3 +184,30 @@ pub fn register_search_methods(engine: &mut Engine) {
     pub fn ft_suglen(&mut self, key: &str) -> Dynamic {
         self.cmd("FT.SUGLEN", vec![Dynamic::from(key.to_string())])
     }
+}
+
+
+pub fn register_search_methods(engine: &mut Engine) {
+    engine
+        .register_fn("ft_create", RedisClient::ft_create)
+        .register_fn("ft_search", RedisClient::ft_search)
+        .register_fn("ft_aggregate", RedisClient::ft_aggregate)
+        .register_fn("ft_info", RedisClient::ft_info)
+        .register_fn("ft_dropindex", RedisClient::ft_dropindex)
+        .register_fn("ft_explain", RedisClient::ft_explain)
+        .register_fn("ft_tagvals", RedisClient::ft_tagvals)
+        .register_fn("ft_cursor_read", RedisClient::ft_cursor_read)
+        .register_fn("ft_cursor_del", RedisClient::ft_cursor_del)
+        .register_fn("ft_config_set", RedisClient::ft_config_set)
+        .register_fn("ft_config_get", RedisClient::ft_config_get)
+        .register_fn("ft_synupdate", RedisClient::ft_synupdate)
+        .register_fn("ft_syndump", RedisClient::ft_syndump)
+        .register_fn("ft_spellcheck", RedisClient::ft_spellcheck)
+        .register_fn("ft_dictadd", RedisClient::ft_dictadd)
+        .register_fn("ft_dictdel", RedisClient::ft_dictdel)
+        .register_fn("ft_dictdump", RedisClient::ft_dictdump)
+        .register_fn("ft_sugadd", RedisClient::ft_sugadd)
+        .register_fn("ft_sugget", RedisClient::ft_sugget)
+        .register_fn("ft_sugdel", RedisClient::ft_sugdel)
+        .register_fn("ft_suglen", RedisClient::ft_suglen);
+}

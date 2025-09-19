@@ -19,8 +19,7 @@ impl RedisClient {
         let mut conn = self.conn.lock().unwrap();
         match conn.lpop::<_, Option<String>>(key, None) {
             Ok(Some(val)) => Dynamic::from(val),
-            Ok(None) => Dynamic::UNIT,
-            Err(_) => Dynamic::UNIT,
+            _ => Dynamic::UNIT,
         }
     }
 
@@ -28,8 +27,7 @@ impl RedisClient {
         let mut conn = self.conn.lock().unwrap();
         match conn.rpop::<_, Option<String>>(key, None) {
             Ok(Some(val)) => Dynamic::from(val),
-            Ok(None) => Dynamic::UNIT,
-            Err(_) => Dynamic::UNIT,
+            _ => Dynamic::UNIT,
         }
     }
 
@@ -40,18 +38,18 @@ impl RedisClient {
 
     pub fn lrange(&mut self, key: &str, start: i64, stop: i64) -> Vec<Dynamic> {
         let mut conn = self.conn.lock().unwrap();
-        match conn.lrange::<_, Vec<String>>(key, start as isize, stop as isize) {
-            Ok(vals) => vals.into_iter().map(Dynamic::from).collect(),
-            Err(_) => vec![],
-        }
+        conn.lrange::<_, Vec<String>>(key, start as isize, stop as isize)
+            .unwrap_or_default()
+            .into_iter()
+            .map(Dynamic::from)
+            .collect()
     }
 
     pub fn lindex(&mut self, key: &str, index: i64) -> Dynamic {
         let mut conn = self.conn.lock().unwrap();
         match conn.lindex::<_, Option<String>>(key, index as isize) {
             Ok(Some(val)) => Dynamic::from(val),
-            Ok(None) => Dynamic::UNIT,
-            Err(_) => Dynamic::UNIT,
+            _ => Dynamic::UNIT,
         }
     }
 
